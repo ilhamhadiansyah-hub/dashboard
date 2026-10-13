@@ -1,0 +1,240 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2685.3">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times; -webkit-text-stroke: #000000}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times; -webkit-text-stroke: #000000; min-height: 14.0px}
+    span.s1 {font-kerning: none}
+  </style>
+</head>
+<body>
+<p class="p1"><span class="s1">&lt;!doctype html&gt;</span></p>
+<p class="p1"><span class="s1">&lt;html lang="id"&gt;&lt;head&gt;&lt;meta charset="utf-8"&gt;</span></p>
+<p class="p1"><span class="s1">&lt;meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"&gt;</span></p>
+<p class="p1"><span class="s1">&lt;title&gt;Dashboard Kurs USD · THB · JPY&lt;/title&gt;</span></p>
+<p class="p1"><span class="s1">&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"&gt;&lt;/script&gt;</span></p>
+<p class="p1"><span class="s1">&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"&gt;&lt;/script&gt;</span></p>
+<p class="p1"><span class="s1">&lt;style&gt;</span></p>
+<p class="p1"><span class="s1">:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);</span></p>
+<p class="p1"><span class="s1">--bg:#e6e5f4;--panel:#f4f4fb;--card:#fff;--ink:#14142b;--mut:#8a8aa3;--line:#ececf6;--acc:#4338f0;--acc2:#cfcdf4;--up:#1e9e5a;--upbg:#d9f6e5;--dn:#e5484d;--dnbg:#fde3e4;--chip:#eeeefa}</span></p>
+<p class="p1"><span class="s1">@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e0e1a;--panel:#151526;--card:#1d1d33;--ink:#f1f1fa;--mut:#9494b0;--line:#2a2a45;--acc:#6f66ff;--acc2:#35345f;--upbg:#15382a;--dnbg:#40191c;--chip:#26263f}}</span></p>
+<p class="p1"><span class="s1">:root[data-theme="dark"]{--bg:#0e0e1a;--panel:#151526;--card:#1d1d33;--ink:#f1f1fa;--mut:#9494b0;--line:#2a2a45;--acc:#6f66ff;--acc2:#35345f;--upbg:#15382a;--dnbg:#40191c;--chip:#26263f}</span></p>
+<p class="p1"><span class="s1">*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}</span></p>
+<p class="p1"><span class="s1">body{margin:0;background:var(--bg);color:var(--ink);font-family:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:14px;padding:16px}</span></p>
+<p class="p1"><span class="s1">.app{max-width:1280px;margin:0 auto;background:var(--panel);border-radius:28px;display:grid;grid-template-columns:210px 1fr;overflow:hidden;min-height:calc(100vh - 32px)}</span></p>
+<p class="p1"><span class="s1">aside{padding:24px 18px;display:flex;flex-direction:column;gap:6px}</span></p>
+<p class="p1"><span class="s1">.brand{display:flex;align-items:center;gap:10px;font-weight:800;margin-bottom:22px}</span></p>
+<p class="p1"><span class="s1">.logo{width:34px;height:34px;border-radius:10px;background:var(--acc);color:#fff;display:grid;place-items:center;font-weight:800}</span></p>
+<p class="p1"><span class="s1">.lbl{font-size:10px;letter-spacing:.12em;color:var(--mut);margin:14px 8px 4px}</span></p>
+<p class="p1"><span class="s1">aside a{display:block;padding:11px 14px;border-radius:12px;color:var(--ink);text-decoration:none;font-weight:600;opacity:.75}</span></p>
+<p class="p1"><span class="s1">aside a.on,aside a:hover{background:var(--acc);color:#fff;opacity:1}</span></p>
+<p class="p1"><span class="s1">main{padding:24px 24px 28px 6px;min-width:0}</span></p>
+<p class="p1"><span class="s1">header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap}</span></p>
+<p class="p1"><span class="s1">h1{margin:0;font-size:22px}.sub{color:var(--mut);font-size:12px;margin-top:2px}</span></p>
+<p class="p1"><span class="s1">.tag{background:var(--chip);color:var(--mut);padding:7px 12px;border-radius:999px;font-size:12px;font-weight:600}</span></p>
+<p class="p1"><span class="s1">.tag.warn{background:#fff3cf;color:#8a6200}</span></p>
+<p class="p1"><span class="s1">.grid{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:16px}</span></p>
+<p class="p1"><span class="s1">.col{display:flex;flex-direction:column;gap:16px;min-width:0}</span></p>
+<p class="p1"><span class="s1">.card{background:var(--card);border-radius:20px;padding:18px;box-shadow:0 1px 0 var(--line)}</span></p>
+<p class="p1"><span class="s1">.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}</span></p>
+<p class="p1"><span class="s1">.kpi{cursor:pointer;border:2px solid transparent;transition:.15s}</span></p>
+<p class="p1"><span class="s1">.kpi:hover{border-color:var(--acc2)}</span></p>
+<p class="p1"><span class="s1">.kpi.sel{background:var(--acc);color:#fff}.kpi.sel .mut{color:#dcdaff}</span></p>
+<p class="p1"><span class="s1">.kh{display:flex;justify-content:space-between;align-items:center}</span></p>
+<p class="p1"><span class="s1">.ico{width:34px;height:34px;border-radius:10px;background:var(--chip);display:grid;place-items:center;font-weight:800;font-size:11px;color:var(--acc)}</span></p>
+<p class="p1"><span class="s1">.kpi.sel .ico{background:rgba(255,255,255,.2);color:#fff}</span></p>
+<p class="p1"><span class="s1">.pill{font-size:11px;font-weight:700;padding:4px 8px;border-radius:999px}</span></p>
+<p class="p1"><span class="s1">.up{background:var(--upbg);color:var(--up)}.dn{background:var(--dnbg);color:var(--dn)}.fl{background:var(--chip);color:var(--mut)}</span></p>
+<p class="p1"><span class="s1">.mut{color:var(--mut);font-size:12px}</span></p>
+<p class="p1"><span class="s1">.kv{font-size:24px;font-weight:800;margin:14px 0 2px;letter-spacing:-.02em}</span></p>
+<p class="p1"><span class="s1">.ch{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap}</span></p>
+<p class="p1"><span class="s1">.ch h2{margin:0;font-size:16px}</span></p>
+<p class="p1"><span class="s1">.ctl{display:flex;gap:6px;align-items:center}</span></p>
+<p class="p1"><span class="s1">.chip{border:0;background:var(--chip);color:var(--ink);padding:7px 12px;border-radius:999px;font:600 12px inherit;font-family:inherit;cursor:pointer}</span></p>
+<p class="p1"><span class="s1">.chip.on{background:var(--acc);color:#fff}</span></p>
+<p class="p1"><span class="s1">select{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 10px;font:600 12px inherit;font-family:inherit}</span></p>
+<p class="p1"><span class="s1">.cv{position:relative;height:270px}</span></p>
+<p class="p1"><span class="s1">.dn-wrap{position:relative;height:190px;max-width:190px;margin:4px auto 10px}</span></p>
+<p class="p1"><span class="s1">.dn-mid{position:absolute;inset:0;display:grid;place-content:center;text-align:center}</span></p>
+<p class="p1"><span class="s1">.dn-mid b{font-size:26px}</span></p>
+<p class="p1"><span class="s1">.row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-top:1px solid var(--line)}</span></p>
+<p class="p1"><span class="s1">.drop{display:block;border:2px dashed var(--acc2);border-radius:16px;padding:20px 12px;text-align:center;cursor:pointer;transition:.15s}</span></p>
+<p class="p1"><span class="s1">.drop:hover,.drop.over{background:var(--chip);border-color:var(--acc)}</span></p>
+<p class="p1"><span class="s1">.drop b{display:block;color:var(--acc);margin-bottom:4px}</span></p>
+<p class="p1"><span class="s1">.btn{border:0;background:var(--acc);color:#fff;border-radius:12px;padding:10px 14px;font:700 13px inherit;font-family:inherit;cursor:pointer;width:100%;margin-top:10px}</span></p>
+<p class="p1"><span class="s1">.btn.alt{background:var(--chip);color:var(--ink)}</span></p>
+<p class="p1"><span class="s1">#msg{font-size:12px;margin-top:10px;min-height:16px}.ok{color:var(--up)}.er{color:var(--dn)}</span></p>
+<p class="p1"><span class="s1">.hint{font-size:11px;color:var(--mut);line-height:1.5;margin-top:10px}</span></p>
+<p class="p1"><span class="s1">label.chk{display:flex;gap:8px;align-items:center;margin-top:10px;font-size:12px}</span></p>
+<p class="p1"><span class="s1">.tw{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:420px}</span></p>
+<p class="p1"><span class="s1">th,td{text-align:right;padding:10px 6px;border-top:1px solid var(--line)}th:first-child,td:first-child{text-align:left}</span></p>
+<p class="p1"><span class="s1">th{color:var(--mut);font-size:11px;font-weight:600;border-top:0}</span></p>
+<p class="p1"><span class="s1">@media(max-width:1020px){.grid{grid-template-columns:minmax(0,1fr)}}</span></p>
+<p class="p1"><span class="s1">@media(max-width:800px){body{padding:8px}.app{grid-template-columns:1fr;border-radius:20px}</span></p>
+<p class="p1"><span class="s1">aside{flex-direction:row;overflow-x:auto;padding:14px;align-items:center}.brand{margin:0 10px 0 0;white-space:nowrap}.lbl{display:none}aside a{white-space:nowrap;padding:8px 12px}</span></p>
+<p class="p1"><span class="s1">main{padding:6px 14px 20px}.kpis{grid-template-columns:1fr}}</span></p>
+<p class="p1"><span class="s1">&lt;/style&gt;&lt;/head&gt;</span></p>
+<p class="p1"><span class="s1">&lt;body&gt;</span></p>
+<p class="p1"><span class="s1">&lt;div class="app"&gt;</span></p>
+<p class="p1"><span class="s1">&lt;aside&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>&lt;div class="brand"&gt;&lt;div class="logo"&gt;AE&lt;/div&gt;ANTAR EMAS&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>&lt;div class="lbl"&gt;MENU&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>&lt;a href="#top" class="on"&gt;Dashboard&lt;/a&gt;&lt;a href="#grafik"&gt;Grafik Kurs&lt;/a&gt;&lt;a href="#tabel"&gt;Tabel Data&lt;/a&gt;&lt;a href="#unggah"&gt;Unggah Data&lt;/a&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/aside&gt;</span></p>
+<p class="p1"><span class="s1">&lt;main id="top"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>&lt;header&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;div&gt;&lt;h1&gt;Laporan Kurs&lt;/h1&gt;&lt;div class="sub" id="upd"&gt;&lt;/div&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;span class="tag" id="src"&gt;&lt;/span&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>&lt;/header&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>&lt;div class="grid"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;div class="col"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">   </span>&lt;div class="kpis" id="kpis"&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">   </span>&lt;div class="card" id="grafik"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="ch"&gt;&lt;h2 id="ctitle"&gt;Pergerakan Kurs&lt;/h2&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">     </span>&lt;div class="ctl" id="chips"&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">     </span>&lt;select id="range"&gt;&lt;option value="7"&gt;7 data&lt;/option&gt;&lt;option value="14"&gt;14 data&lt;/option&gt;&lt;option value="30" selected&gt;30 data&lt;/option&gt;&lt;option value="0"&gt;Semua&lt;/option&gt;&lt;/select&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="cv"&gt;&lt;canvas id="bar"&gt;&lt;/canvas&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">   </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">   </span>&lt;div class="card" id="tabel"&gt;&lt;div class="ch"&gt;&lt;h2&gt;Data Terbaru&lt;/h2&gt;&lt;span class="mut"&gt;Rupiah per 1 unit mata uang&lt;/span&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="tw"&gt;&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Tanggal&lt;/th&gt;&lt;th&gt;USD&lt;/th&gt;&lt;th&gt;THB&lt;/th&gt;&lt;th&gt;JPY&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody id="tb"&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">   </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;div class="col"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">   </span>&lt;div class="card"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="ch"&gt;&lt;h2 id="stt"&gt;Statistik&lt;/h2&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="dn-wrap"&gt;&lt;canvas id="dn"&gt;&lt;/canvas&gt;&lt;div class="dn-mid"&gt;&lt;b id="dpct"&gt;&lt;/b&gt;&lt;span class="mut"&gt;posisi dalam rentang&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div id="stats"&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">   </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">   </span>&lt;div class="card" id="unggah"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="ch"&gt;&lt;h2&gt;Unggah Data&lt;/h2&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;label class="drop" id="drop"&gt;&lt;b&gt;Pilih atau tarik file ke sini&lt;/b&gt;&lt;span class="mut"&gt;CSV · XLSX · XLS · bisa beberapa file sekaligus&lt;/span&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">     </span>&lt;input type="file" id="file" accept=".csv,.xlsx,.xls" multiple hidden&gt;&lt;/label&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;label class="chk"&gt;&lt;input type="checkbox" id="replace"&gt; Ganti semua data (bukan digabung)&lt;/label&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div id="msg"&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;button class="btn alt" id="reset"&gt;Kembali ke data contoh&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="hint"&gt;&lt;b&gt;Format yang dikenali:&lt;/b&gt;&lt;br&gt;1) File per mata uang, seperti unduhan BI (&lt;i&gt;Kurs Transaksi USD.xlsx&lt;/i&gt; dst.): judul di atas tabel, kolom &lt;i&gt;NO, Nilai, Kurs Jual, Kurs Beli, Tanggal&lt;/i&gt;. Mata uang dibaca dari judul sheet atau nama file.&lt;br&gt;2) Satu file lebar: kolom &lt;i&gt;Tanggal, USD, THB, JPY&lt;/i&gt;.&lt;br&gt;Kurs tengah = rata-rata Jual &amp;amp; Beli, dibagi kolom Nilai (JPY 100 → per 1 JPY). Data tersimpan di browser Anda.&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">   </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/main&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1">&lt;script&gt;</span></p>
+<p class="p1"><span class="s1">const CUR=['USD','THB','JPY'],LS='kurs-dash-v1',$=s=&gt;document.querySelector(s);</span></p>
+<p class="p1"><span class="s1">let rows=[],sample=true,cur='USD',range=30,bar,dn;</span></p>
+<p class="p1"><span class="s1">const css=v=&gt;getComputedStyle(document.documentElement).getPropertyValue(v).trim();</span></p>
+<p class="p1"><span class="s1">const fmt=v=&gt;v==null?'–':v.toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2});</span></p>
+<p class="p1"><span class="s1">const dlabel=d=&gt;{const[y,m,dd]=d.split('-');return `${dd}/${m}`};</span></p>
+<p class="p1"><span class="s1">const dlong=d=&gt;new Date(d+'T00:00:00').toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">function sampleData(){let s=7,r=()=&gt;(s=(s*9301+49297)%233280)/233280-.5;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>let v={USD:16480,THB:507,JPY:109.5},out=[],d=new Date();d.setDate(d.getDate()-44);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>for(let i=0;i&lt;45;i++){d.setDate(d.getDate()+1);if([0,6].includes(d.getDay()))continue;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>v.USD+=r()*70;v.THB+=r()*2.2;v.JPY+=r()*.7;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>out.push({d:d.toISOString().slice(0,10),USD:+v.USD.toFixed(2),THB:+v.THB.toFixed(2),JPY:+v.JPY.toFixed(2)})}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>return out}</span></p>
+<p class="p1"><span class="s1">function load(){try{const j=JSON.parse(localStorage.getItem(LS));if(j&amp;&amp;j.rows&amp;&amp;j.rows.length){rows=j.rows;sample=false;return}}catch(e){}rows=sampleData();sample=true}</span></p>
+<p class="p1"><span class="s1">function save(){try{localStorage.setItem(LS,JSON.stringify({rows}))}catch(e){}}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">const ser=c=&gt;rows.filter(r=&gt;r[c]!=null);</span></p>
+<p class="p1"><span class="s1">const pct=(a,b)=&gt;b?((a-b)/b*100):0;</span></p>
+<p class="p1"><span class="s1">function pill(p){const c=Math.abs(p)&lt;.005?'fl':p&gt;0?'up':'dn';return `&lt;span class="pill ${c}"&gt;${p&gt;0?'+':''}${p.toFixed(2)}%&lt;/span&gt;`}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">function render(){</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>$('#src').className='tag'+(sample?' warn':'');$('#src').textContent=sample?'Data contoh — unggah file untuk mengganti':rows.length+' hari data';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>const last=rows[rows.length-1];$('#upd').textContent=last?'Data terakhir: '+dlong(last.d):'Belum ada data';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>$('#kpis').innerHTML=CUR.map(c=&gt;{const s=ser(c),l=s[s.length-1],p=s[s.length-2];</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>return `&lt;div class="card kpi ${c===cur?'sel':''}" data-c="${c}"&gt;&lt;div class="kh"&gt;&lt;div class="ico"&gt;${c}&lt;/div&gt;${l&amp;&amp;p?pill(pct(l[c],p[c])):''}&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;div class="kv"&gt;${l?fmt(l[c]):'–'}&lt;/div&gt;&lt;div class="mut"&gt;Rp per 1 ${c} · vs data sebelumnya&lt;/div&gt;&lt;/div&gt;`}).join('');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>document.querySelectorAll('.kpi').forEach(e=&gt;e.onclick=()=&gt;{cur=e.dataset.c;render()});</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>$('#chips').innerHTML=CUR.map(c=&gt;`&lt;button class="chip ${c===cur?'on':''}" data-c="${c}"&gt;${c}&lt;/button&gt;`).join('');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>document.querySelectorAll('.chip').forEach(e=&gt;e.onclick=()=&gt;{cur=e.dataset.c;render()});</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>$('#ctitle').textContent='Kurs '+cur+' terhadap Rupiah';$('#stt').textContent='Statistik '+cur;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>let s=ser(cur);if(range)s=s.slice(-range);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>const ink=css('--mut'),grid=css('--line');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>if(bar)bar.destroy();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>bar=new Chart($('#bar'),{type:'bar',data:{labels:s.map(r=&gt;dlabel(r.d)),datasets:[{data:s.map(r=&gt;r[cur]),borderRadius:8,borderSkipped:false,</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>backgroundColor:s.map((_,i)=&gt;i===s.length-1?css('--acc'):css('--acc2'))}]},</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>options:{maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=&gt;'Rp '+fmt(c.parsed.y)}}},</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>scales:{x:{grid:{display:false},ticks:{color:ink,maxTicksLimit:10}},y:{beginAtZero:false,grid:{color:grid},ticks:{color:ink,callback:v=&gt;v.toLocaleString('id-ID')}}}}});</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>const vals=s.map(r=&gt;r[cur]);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>if(vals.length){const mx=Math.max(...vals),mn=Math.min(...vals),av=vals.reduce((a,b)=&gt;a+b,0)/vals.length,lv=vals[vals.length-1],pos=mx===mn?50:(lv-mn)/(mx-mn)*100;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>$('#dpct').textContent=Math.round(pos)+'%';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if(dn)dn.destroy();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>dn=new Chart($('#dn'),{type:'doughnut',data:{datasets:[{data:[pos,100-pos],backgroundColor:[css('--acc'),css('--acc2')],borderWidth:0}]},options:{cutout:'78%',plugins:{legend:{display:false},tooltip:{enabled:false}}}});</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>$('#stats').innerHTML=[['Tertinggi',fmt(mx)],['Terendah',fmt(mn)],['Rata-rata',fmt(av)],['Perubahan periode',pill(pct(lv,vals[0]))]].map(a=&gt;`&lt;div class="row"&gt;&lt;span class="mut"&gt;${a[0]}&lt;/span&gt;&lt;b&gt;${a[1]}&lt;/b&gt;&lt;/div&gt;`).join('')}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>$('#tb').innerHTML=rows.slice(-8).reverse().map(r=&gt;`&lt;tr&gt;&lt;td&gt;${dlong(r.d)}&lt;/td&gt;${CUR.map(c=&gt;`&lt;td&gt;${fmt(r[c])}&lt;/td&gt;`).join('')}&lt;/tr&gt;`).join('');</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">/* ---------- parsing upload ---------- */</span></p>
+<p class="p1"><span class="s1">const MON={jan:1,feb:2,mar:3,apr:4,mei:5,may:5,jun:6,jul:7,agu:8,aug:8,ags:8,sep:9,okt:10,oct:10,nov:11,des:12,dec:12};</span></p>
+<p class="p1"><span class="s1">const p2=n=&gt;String(n).padStart(2,'0');</span></p>
+<p class="p1"><span class="s1">function pDate(v){if(v==null||v==='')return null;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>if(v instanceof Date&amp;&amp;!isNaN(v)){v=new Date(v.getTime()+432e5);return `${v.getFullYear()}-${p2(v.getMonth()+1)}-${p2(v.getDate())}`}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>if(typeof v==='number'&amp;&amp;v&gt;20000&amp;&amp;v&lt;80000){const d=new Date(Math.round((v-25569)*864e5));return d.toISOString().slice(0,10)}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>const s=String(v).trim();let m;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>if(m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/))return `${m[1]}-${p2(m[2])}-${p2(m[3])}`;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>if(m=s.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{4})/))return `${m[3]}-${p2(m[2])}-${p2(m[1])}`;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>if(m=s.match(/^(\d{1,2})\s+([A-Za-z]{3,})\.?\s+(\d{4})/)){const mo=MON[m[2].slice(0,3).toLowerCase()];if(mo)return `${m[3]}-${p2(mo)}-${p2(m[1])}`}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>const d=new Date(s);return isNaN(d)?null:`${d.getFullYear()}-${p2(d.getMonth()+1)}-${p2(d.getDate())}`}</span></p>
+<p class="p1"><span class="s1">function pNum(v){if(typeof v==='number')return isFinite(v)?v:null;if(v==null)return null;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>let s=String(v).replace(/[^\d.,-]/g,'');if(!s)return null;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>const c=s.lastIndexOf(','),d=s.lastIndexOf('.');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>if(c&gt;-1&amp;&amp;d&gt;-1)s=c&gt;d?s.replace(/\./g,'').replace(',','.'):s.replace(/,/g,'');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>else if(c&gt;-1)s=/,\d{1,2}$/.test(s)&amp;&amp;s.split(',').length===2?s.replace(',','.'):s.replace(/,/g,'');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>else if(d&gt;-1&amp;&amp;(s.split('.').length&gt;2||/^\d{1,3}\.\d{3}$/.test(s)))s=s.replace(/\./g,'');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>const n=parseFloat(s);return isFinite(n)?n:null}</span></p>
+<p class="p1"><span class="s1">function convert(js,hint){</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>if(!js.length)throw new Error('File kosong.');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>const keys=Object.keys(js[0]),map={},find=re=&gt;keys.find(k=&gt;re.test(k.trim()));</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>const dk=find(/tanggal|date|tgl/i);if(!dk)throw new Error('Kolom Tanggal tidak ditemukan.');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>const wide=CUR.filter(c=&gt;keys.some(k=&gt;new RegExp('^'+c+'\\b','i').test(k.trim())));</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>const put=(d,c,v)=&gt;{if(d&amp;&amp;v!=null){(map[d]=map[d]||{d})[c]=+v.toFixed(4)}};</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>if(wide.length){const wk={};wide.forEach(c=&gt;wk[c]=keys.find(k=&gt;new RegExp('^'+c+'\\b','i').test(k.trim())));</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>js.forEach(r=&gt;{const d=pDate(r[dk]);wide.forEach(c=&gt;put(d,c,pNum(r[wk[c]])))})}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>else{const ck=find(/mata uang|currency|valuta|kode/i);if(!ck&amp;&amp;!hint)throw new Error('Mata uang tidak terdeteksi. Pakai kolom Mata Uang, atau tulis USD/THB/JPY di judul sheet atau nama file.');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const nk=find(/^nilai|^value|^unit/i),mk=find(/tengah|mid/i),jk=find(/jual|sell/i),bk=find(/beli|buy/i),gk=find(/kurs|rate/i);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>js.forEach(r=&gt;{const m=String(ck?r[ck]:hint).toUpperCase().match(/USD|THB|JPY/);if(!m)return;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">   </span>let v=null;if(mk)v=pNum(r[mk]);else if(jk&amp;&amp;bk){const a=pNum(r[jk]),b=pNum(r[bk]);if(a!=null&amp;&amp;b!=null)v=(a+b)/2}else if(gk)v=pNum(r[gk]);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">   </span>const u=nk?pNum(r[nk]):1;if(v!=null&amp;&amp;u&gt;1)v=v/u;put(pDate(r[dk]),m[0],v)})}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>const out=Object.values(map);if(!out.length)throw new Error('Tidak ada data USD/THB/JPY yang bisa dibaca.');return out}</span></p>
+<p class="p1"><span class="s1">function parseWorkbook(wb,fname){let out=[];</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>wb.SheetNames.forEach(n=&gt;{const aoa=XLSX.utils.sheet_to_json(wb.Sheets[n],{header:1,defval:'',raw:true});</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const hi=aoa.findIndex(r=&gt;r.some(c=&gt;/tanggal|date|tgl/i.test(String(c)))&amp;&amp;r.filter(c=&gt;String(c).trim()!=='').length&gt;=2);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if(hi&lt;0)return;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const head=aoa[hi].map((c,i)=&gt;String(c).trim()||('c'+i));</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const hint=((aoa.slice(0,hi).flat().join(' ')+' '+n+' '+fname).match(/USD|THB|JPY/i)||[''])[0].toUpperCase();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const js=aoa.slice(hi+1).map(r=&gt;Object.fromEntries(head.map((h,i)=&gt;[h,r[i]]))).filter(o=&gt;Object.values(o).some(v=&gt;v!==''));</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>out=out.concat(convert(js,hint))});</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>if(!out.length)throw new Error('Tidak ada data USD/THB/JPY yang bisa dibaca.');return out}</span></p>
+<p class="p1"><span class="s1">function msg(t,ok){const m=$('#msg');m.textContent=t;m.className=ok?'ok':'er'}</span></p>
+<p class="p1"><span class="s1">function readFile(f){return new Promise((res,rej)=&gt;{const csv=/\.csv$/i.test(f.name),rd=new FileReader();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>rd.onload=e=&gt;{try{const wb=csv?XLSX.read(e.target.result,{type:'string',raw:true}):XLSX.read(e.target.result,{type:'array',cellDates:true});</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>res(parseWorkbook(wb,f.name))}catch(err){rej(new Error(f.name+': '+err.message))}};</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>rd.onerror=()=&gt;rej(new Error('Gagal membaca '+f.name));</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>csv?rd.readAsText(f):rd.readAsArrayBuffer(f)})}</span></p>
+<p class="p1"><span class="s1">async function handle(files){files=[...(files||[])];if(!files.length)return;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>try{let inc=[];for(const f of files)inc=inc.concat(await readFile(f));</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const base=(sample||$('#replace').checked)?{}:Object.fromEntries(rows.map(r=&gt;[r.d,r]));</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>inc.forEach(r=&gt;{base[r.d]=Object.assign(base[r.d]||{},r)});</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>rows=Object.values(base).sort((a,b)=&gt;a.d&lt;b.d?-1:1);sample=false;save();render();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>msg(`Berhasil: ${files.length} file, ${new Set(inc.map(r=&gt;r.d)).size} tanggal, mata uang ${CUR.filter(c=&gt;inc.some(r=&gt;r[c]!=null)).join(', ')}.`,true)}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>catch(err){msg(err.message||'Gagal membaca file.',false)}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space"> </span>$('#file').value=''}</span></p>
+<p class="p1"><span class="s1">$('#file').onchange=e=&gt;handle(e.target.files);</span></p>
+<p class="p1"><span class="s1">const dz=$('#drop');</span></p>
+<p class="p1"><span class="s1">['dragover','dragenter'].forEach(t=&gt;dz.addEventListener(t,e=&gt;{e.preventDefault();dz.classList.add('over')}));</span></p>
+<p class="p1"><span class="s1">['dragleave','drop'].forEach(t=&gt;dz.addEventListener(t,e=&gt;{e.preventDefault();dz.classList.remove('over')}));</span></p>
+<p class="p1"><span class="s1">dz.addEventListener('drop',e=&gt;handle(e.dataTransfer.files));</span></p>
+<p class="p1"><span class="s1">$('#reset').onclick=()=&gt;{try{localStorage.removeItem(LS)}catch(e){}rows=sampleData();sample=true;render();msg('Kembali ke data contoh.',true)};</span></p>
+<p class="p1"><span class="s1">$('#range').onchange=e=&gt;{range=+e.target.value;render()};</span></p>
+<p class="p1"><span class="s1">document.querySelectorAll('aside a').forEach(a=&gt;a.addEventListener('click',()=&gt;{document.querySelectorAll('aside a').forEach(x=&gt;x.classList.remove('on'));a.classList.add('on')}));</span></p>
+<p class="p1"><span class="s1">matchMedia('(prefers-color-scheme: dark)').addEventListener('change',render);</span></p>
+<p class="p1"><span class="s1">load();render();</span></p>
+<p class="p1"><span class="s1">&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;</span></p>
+</body>
+</html>
