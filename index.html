@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dashboard Kurs USD · THB · JPY</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#e6e5f4;--panel:#f4f4fb;--card:#fff;--ink:#14142b;--mut:#8a8aa3;--line:#ececf6;--acc:#4338f0;--acc2:#cfcdf4;--up:#1e9e5a;--upbg:#d9f6e5;--dn:#e5484d;--dnbg:#fde3e4;--chip:#eeeefa}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e0e1a;--panel:#151526;--card:#1d1d33;--ink:#f1f1fa;--mut:#9494b0;--line:#2a2a45;--acc:#6f66ff;--acc2:#35345f;--upbg:#15382a;--dnbg:#40191c;--chip:#26263f}}
+:root[data-theme="dark"]{--bg:#0e0e1a;--panel:#151526;--card:#1d1d33;--ink:#f1f1fa;--mut:#9494b0;--line:#2a2a45;--acc:#6f66ff;--acc2:#35345f;--upbg:#15382a;--dnbg:#40191c;--chip:#26263f}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:14px;padding:16px}
+.app{max-width:1280px;margin:0 auto;background:var(--panel);border-radius:28px;display:grid;grid-template-columns:210px 1fr;overflow:hidden;min-height:calc(100vh - 32px)}
+aside{padding:24px 18px;display:flex;flex-direction:column;gap:6px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;margin-bottom:22px}
+.logo{width:34px;height:34px;border-radius:10px;background:var(--acc);color:#fff;display:grid;place-items:center;font-weight:800}
+.lbl{font-size:10px;letter-spacing:.12em;color:var(--mut);margin:14px 8px 4px}
+aside a{display:block;padding:11px 14px;border-radius:12px;color:var(--ink);text-decoration:none;font-weight:600;opacity:.75}
+aside a.on,aside a:hover{background:var(--acc);color:#fff;opacity:1}
+main{padding:24px 24px 28px 6px;min-width:0}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+h1{margin:0;font-size:22px}.sub{color:var(--mut);font-size:12px;margin-top:2px}
+.tag{background:var(--chip);color:var(--mut);padding:7px 12px;border-radius:999px;font-size:12px;font-weight:600}
+.tag.warn{background:#fff3cf;color:#8a6200}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:16px}
+.col{display:flex;flex-direction:column;gap:16px;min-width:0}
+.card{background:var(--card);border-radius:20px;padding:18px;box-shadow:0 1px 0 var(--line)}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.kpi{cursor:pointer;border:2px solid transparent;transition:.15s}
+.kpi:hover{border-color:var(--acc2)}
+.kpi.sel{background:var(--acc);color:#fff}.kpi.sel .mut{color:#dcdaff}
+.kh{display:flex;justify-content:space-between;align-items:center}
+.ico{width:34px;height:34px;border-radius:10px;background:var(--chip);display:grid;place-items:center;font-weight:800;font-size:11px;color:var(--acc)}
+.kpi.sel .ico{background:rgba(255,255,255,.2);color:#fff}
+.pill{font-size:11px;font-weight:700;padding:4px 8px;border-radius:999px}
+.up{background:var(--upbg);color:var(--up)}.dn{background:var(--dnbg);color:var(--dn)}.fl{background:var(--chip);color:var(--mut)}
+.mut{color:var(--mut);font-size:12px}
+.kv{font-size:24px;font-weight:800;margin:14px 0 2px;letter-spacing:-.02em}
+.ch{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.ch h2{margin:0;font-size:16px}
+.ctl{display:flex;gap:6px;align-items:center}
+.chip{border:0;background:var(--chip);color:var(--ink);padding:7px 12px;border-radius:999px;font:600 12px inherit;font-family:inherit;cursor:pointer}
+.chip.on{background:var(--acc);color:#fff}
+select{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 10px;font:600 12px inherit;font-family:inherit}
+.cv{position:relative;height:270px}
+.dn-wrap{position:relative;height:190px;max-width:190px;margin:4px auto 10px}
+.dn-mid{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+.dn-mid b{font-size:26px}
+.row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-top:1px solid var(--line)}
+.drop{display:block;border:2px dashed var(--acc2);border-radius:16px;padding:20px 12px;text-align:center;cursor:pointer;transition:.15s}
+.drop:hover,.drop.over{background:var(--chip);border-color:var(--acc)}
+.drop b{display:block;color:var(--acc);margin-bottom:4px}
+.btn{border:0;background:var(--acc);color:#fff;border-radius:12px;padding:10px 14px;font:700 13px inherit;font-family:inherit;cursor:pointer;width:100%;margin-top:10px}
+.btn.alt{background:var(--chip);color:var(--ink)}
+#msg{font-size:12px;margin-top:10px;min-height:16px}.ok{color:var(--up)}.er{color:var(--dn)}
+.hint{font-size:11px;color:var(--mut);line-height:1.5;margin-top:10px}
+label.chk{display:flex;gap:8px;align-items:center;margin-top:10px;font-size:12px}
+.tw{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:420px}
+th,td{text-align:right;padding:10px 6px;border-top:1px solid var(--line)}th:first-child,td:first-child{text-align:left}
+th{color:var(--mut);font-size:11px;font-weight:600;border-top:0}
+@media(max-width:1020px){.grid{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:800px){body{padding:8px}.app{grid-template-columns:1fr;border-radius:20px}
+aside{flex-direction:row;overflow-x:auto;padding:14px;align-items:center}.brand{margin:0 10px 0 0;white-space:nowrap}.lbl{display:none}aside a{white-space:nowrap;padding:8px 12px}
+main{padding:6px 14px 20px}.kpis{grid-template-columns:1fr}}
+</style></head>
+<body>
+<div class="app">
+<aside>
+ <div class="brand"><div class="logo">AE</div>ANTAR EMAS</div>
+ <div class="lbl">MENU</div>
+ <a href="#top" class="on">Dashboard</a><a href="#grafik">Grafik Kurs</a><a href="#tabel">Tabel Data</a><a href="#unggah">Unggah Data</a>
+</aside>
+<main id="top">
+ <header>
+  <div><h1>Laporan Kurs</h1><div class="sub" id="upd"></div></div>
+  <span class="tag" id="src"></span>
+ </header>
+ <div class="grid">
+  <div class="col">
+   <div class="kpis" id="kpis"></div>
+   <div class="card" id="grafik">
+    <div class="ch"><h2 id="ctitle">Pergerakan Kurs</h2>
+     <div class="ctl" id="chips"></div>
+     <select id="range"><option value="7">7 data</option><option value="14">14 data</option><option value="30" selected>30 data</option><option value="0">Semua</option></select>
+    </div>
+    <div class="cv"><canvas id="bar"></canvas></div>
+   </div>
+   <div class="card" id="tabel"><div class="ch"><h2>Data Terbaru</h2><span class="mut">Rupiah per 1 unit mata uang</span></div>
+    <div class="tw"><table><thead><tr><th>Tanggal</th><th>USD</th><th>THB</th><th>JPY</th></tr></thead><tbody id="tb"></tbody></table></div>
+   </div>
+  </div>
+  <div class="col">
+   <div class="card">
+    <div class="ch"><h2 id="stt">Statistik</h2></div>
+    <div class="dn-wrap"><canvas id="dn"></canvas><div class="dn-mid"><b id="dpct"></b><span class="mut">posisi dalam rentang</span></div></div>
+    <div id="stats"></div>
+   </div>
+   <div class="card" id="unggah">
+    <div class="ch"><h2>Unggah Data</h2></div>
+    <label class="drop" id="drop"><b>Pilih atau tarik file ke sini</b><span class="mut">CSV · XLSX · XLS · bisa beberapa file sekaligus</span>
+     <input type="file" id="file" accept=".csv,.xlsx,.xls" multiple hidden></label>
+    <label class="chk"><input type="checkbox" id="replace"> Ganti semua data (bukan digabung)</label>
+    <div id="msg"></div>
+    <button class="btn alt" id="reset">Kembali ke data contoh</button>
+    <div class="hint"><b>Format yang dikenali:</b><br>1) File per mata uang, seperti unduhan BI (<i>Kurs Transaksi USD.xlsx</i> dst.): judul di atas tabel, kolom <i>NO, Nilai, Kurs Jual, Kurs Beli, Tanggal</i>. Mata uang dibaca dari judul sheet atau nama file.<br>2) Satu file lebar: kolom <i>Tanggal, USD, THB, JPY</i>.<br>Kurs tengah = rata-rata Jual &amp; Beli, dibagi kolom Nilai (JPY 100 → per 1 JPY). Data tersimpan di browser Anda.</div>
+   </div>
+  </div>
+ </div>
+</main></div>
+<script>
+const CUR=['USD','THB','JPY'],LS='kurs-dash-v1',$=s=>document.querySelector(s);
+let rows=[],sample=true,cur='USD',range=30,bar,dn;
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const fmt=v=>v==null?'–':v.toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2});
+const dlabel=d=>{const[y,m,dd]=d.split('-');return `${dd}/${m}`};
+const dlong=d=>new Date(d+'T00:00:00').toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
+
+function sampleData(){let s=7,r=()=>(s=(s*9301+49297)%233280)/233280-.5;
+ let v={USD:16480,THB:507,JPY:109.5},out=[],d=new Date();d.setDate(d.getDate()-44);
+ for(let i=0;i<45;i++){d.setDate(d.getDate()+1);if([0,6].includes(d.getDay()))continue;
+  v.USD+=r()*70;v.THB+=r()*2.2;v.JPY+=r()*.7;
+  out.push({d:d.toISOString().slice(0,10),USD:+v.USD.toFixed(2),THB:+v.THB.toFixed(2),JPY:+v.JPY.toFixed(2)})}
+ return out}
+function load(){try{const j=JSON.parse(localStorage.getItem(LS));if(j&&j.rows&&j.rows.length){rows=j.rows;sample=false;return}}catch(e){}rows=sampleData();sample=true}
+function save(){try{localStorage.setItem(LS,JSON.stringify({rows}))}catch(e){}}
+
+const ser=c=>rows.filter(r=>r[c]!=null);
+const pct=(a,b)=>b?((a-b)/b*100):0;
+function pill(p){const c=Math.abs(p)<.005?'fl':p>0?'up':'dn';return `<span class="pill ${c}">${p>0?'+':''}${p.toFixed(2)}%</span>`}
+
+function render(){
+ $('#src').className='tag'+(sample?' warn':'');$('#src').textContent=sample?'Data contoh — unggah file untuk mengganti':rows.length+' hari data';
+ const last=rows[rows.length-1];$('#upd').textContent=last?'Data terakhir: '+dlong(last.d):'Belum ada data';
+ $('#kpis').innerHTML=CUR.map(c=>{const s=ser(c),l=s[s.length-1],p=s[s.length-2];
+  return `<div class="card kpi ${c===cur?'sel':''}" data-c="${c}"><div class="kh"><div class="ico">${c}</div>${l&&p?pill(pct(l[c],p[c])):''}</div>
+  <div class="kv">${l?fmt(l[c]):'–'}</div><div class="mut">Rp per 1 ${c} · vs data sebelumnya</div></div>`}).join('');
+ document.querySelectorAll('.kpi').forEach(e=>e.onclick=()=>{cur=e.dataset.c;render()});
+ $('#chips').innerHTML=CUR.map(c=>`<button class="chip ${c===cur?'on':''}" data-c="${c}">${c}</button>`).join('');
+ document.querySelectorAll('.chip').forEach(e=>e.onclick=()=>{cur=e.dataset.c;render()});
+ $('#ctitle').textContent='Kurs '+cur+' terhadap Rupiah';$('#stt').textContent='Statistik '+cur;
+ let s=ser(cur);if(range)s=s.slice(-range);
+ const ink=css('--mut'),grid=css('--line');
+ if(bar)bar.destroy();
+ bar=new Chart($('#bar'),{type:'bar',data:{labels:s.map(r=>dlabel(r.d)),datasets:[{data:s.map(r=>r[cur]),borderRadius:8,borderSkipped:false,
+  backgroundColor:s.map((_,i)=>i===s.length-1?css('--acc'):css('--acc2'))}]},
+  options:{maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'Rp '+fmt(c.parsed.y)}}},
+  scales:{x:{grid:{display:false},ticks:{color:ink,maxTicksLimit:10}},y:{beginAtZero:false,grid:{color:grid},ticks:{color:ink,callback:v=>v.toLocaleString('id-ID')}}}}});
+ const vals=s.map(r=>r[cur]);
+ if(vals.length){const mx=Math.max(...vals),mn=Math.min(...vals),av=vals.reduce((a,b)=>a+b,0)/vals.length,lv=vals[vals.length-1],pos=mx===mn?50:(lv-mn)/(mx-mn)*100;
+  $('#dpct').textContent=Math.round(pos)+'%';
+  if(dn)dn.destroy();
+  dn=new Chart($('#dn'),{type:'doughnut',data:{datasets:[{data:[pos,100-pos],backgroundColor:[css('--acc'),css('--acc2')],borderWidth:0}]},options:{cutout:'78%',plugins:{legend:{display:false},tooltip:{enabled:false}}}});
+  $('#stats').innerHTML=[['Tertinggi',fmt(mx)],['Terendah',fmt(mn)],['Rata-rata',fmt(av)],['Perubahan periode',pill(pct(lv,vals[0]))]].map(a=>`<div class="row"><span class="mut">${a[0]}</span><b>${a[1]}</b></div>`).join('')}
+ $('#tb').innerHTML=rows.slice(-8).reverse().map(r=>`<tr><td>${dlong(r.d)}</td>${CUR.map(c=>`<td>${fmt(r[c])}</td>`).join('')}</tr>`).join('');
+}
+
+/* ---------- parsing upload ---------- */
+const MON={jan:1,feb:2,mar:3,apr:4,mei:5,may:5,jun:6,jul:7,agu:8,aug:8,ags:8,sep:9,okt:10,oct:10,nov:11,des:12,dec:12};
+const p2=n=>String(n).padStart(2,'0');
+function pDate(v){if(v==null||v==='')return null;
+ if(v instanceof Date&&!isNaN(v)){v=new Date(v.getTime()+432e5);return `${v.getFullYear()}-${p2(v.getMonth()+1)}-${p2(v.getDate())}`}
+ if(typeof v==='number'&&v>20000&&v<80000){const d=new Date(Math.round((v-25569)*864e5));return d.toISOString().slice(0,10)}
+ const s=String(v).trim();let m;
+ if(m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/))return `${m[1]}-${p2(m[2])}-${p2(m[3])}`;
+ if(m=s.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{4})/))return `${m[3]}-${p2(m[2])}-${p2(m[1])}`;
+ if(m=s.match(/^(\d{1,2})\s+([A-Za-z]{3,})\.?\s+(\d{4})/)){const mo=MON[m[2].slice(0,3).toLowerCase()];if(mo)return `${m[3]}-${p2(mo)}-${p2(m[1])}`}
+ const d=new Date(s);return isNaN(d)?null:`${d.getFullYear()}-${p2(d.getMonth()+1)}-${p2(d.getDate())}`}
+function pNum(v){if(typeof v==='number')return isFinite(v)?v:null;if(v==null)return null;
+ let s=String(v).replace(/[^\d.,-]/g,'');if(!s)return null;
+ const c=s.lastIndexOf(','),d=s.lastIndexOf('.');
+ if(c>-1&&d>-1)s=c>d?s.replace(/\./g,'').replace(',','.'):s.replace(/,/g,'');
+ else if(c>-1)s=/,\d{1,2}$/.test(s)&&s.split(',').length===2?s.replace(',','.'):s.replace(/,/g,'');
+ else if(d>-1&&(s.split('.').length>2||/^\d{1,3}\.\d{3}$/.test(s)))s=s.replace(/\./g,'');
+ const n=parseFloat(s);return isFinite(n)?n:null}
+function convert(js,hint){
+ if(!js.length)throw new Error('File kosong.');
+ const keys=Object.keys(js[0]),map={},find=re=>keys.find(k=>re.test(k.trim()));
+ const dk=find(/tanggal|date|tgl/i);if(!dk)throw new Error('Kolom Tanggal tidak ditemukan.');
+ const wide=CUR.filter(c=>keys.some(k=>new RegExp('^'+c+'\\b','i').test(k.trim())));
+ const put=(d,c,v)=>{if(d&&v!=null){(map[d]=map[d]||{d})[c]=+v.toFixed(4)}};
+ if(wide.length){const wk={};wide.forEach(c=>wk[c]=keys.find(k=>new RegExp('^'+c+'\\b','i').test(k.trim())));
+  js.forEach(r=>{const d=pDate(r[dk]);wide.forEach(c=>put(d,c,pNum(r[wk[c]])))})}
+ else{const ck=find(/mata uang|currency|valuta|kode/i);if(!ck&&!hint)throw new Error('Mata uang tidak terdeteksi. Pakai kolom Mata Uang, atau tulis USD/THB/JPY di judul sheet atau nama file.');
+  const nk=find(/^nilai|^value|^unit/i),mk=find(/tengah|mid/i),jk=find(/jual|sell/i),bk=find(/beli|buy/i),gk=find(/kurs|rate/i);
+  js.forEach(r=>{const m=String(ck?r[ck]:hint).toUpperCase().match(/USD|THB|JPY/);if(!m)return;
+   let v=null;if(mk)v=pNum(r[mk]);else if(jk&&bk){const a=pNum(r[jk]),b=pNum(r[bk]);if(a!=null&&b!=null)v=(a+b)/2}else if(gk)v=pNum(r[gk]);
+   const u=nk?pNum(r[nk]):1;if(v!=null&&u>1)v=v/u;put(pDate(r[dk]),m[0],v)})}
+ const out=Object.values(map);if(!out.length)throw new Error('Tidak ada data USD/THB/JPY yang bisa dibaca.');return out}
+function parseWorkbook(wb,fname){let out=[];
+ wb.SheetNames.forEach(n=>{const aoa=XLSX.utils.sheet_to_json(wb.Sheets[n],{header:1,defval:'',raw:true});
+  const hi=aoa.findIndex(r=>r.some(c=>/tanggal|date|tgl/i.test(String(c)))&&r.filter(c=>String(c).trim()!=='').length>=2);
+  if(hi<0)return;
+  const head=aoa[hi].map((c,i)=>String(c).trim()||('c'+i));
+  const hint=((aoa.slice(0,hi).flat().join(' ')+' '+n+' '+fname).match(/USD|THB|JPY/i)||[''])[0].toUpperCase();
+  const js=aoa.slice(hi+1).map(r=>Object.fromEntries(head.map((h,i)=>[h,r[i]]))).filter(o=>Object.values(o).some(v=>v!==''));
+  out=out.concat(convert(js,hint))});
+ if(!out.length)throw new Error('Tidak ada data USD/THB/JPY yang bisa dibaca.');return out}
+function msg(t,ok){const m=$('#msg');m.textContent=t;m.className=ok?'ok':'er'}
+function readFile(f){return new Promise((res,rej)=>{const csv=/\.csv$/i.test(f.name),rd=new FileReader();
+ rd.onload=e=>{try{const wb=csv?XLSX.read(e.target.result,{type:'string',raw:true}):XLSX.read(e.target.result,{type:'array',cellDates:true});
+  res(parseWorkbook(wb,f.name))}catch(err){rej(new Error(f.name+': '+err.message))}};
+ rd.onerror=()=>rej(new Error('Gagal membaca '+f.name));
+ csv?rd.readAsText(f):rd.readAsArrayBuffer(f)})}
+async function handle(files){files=[...(files||[])];if(!files.length)return;
+ try{let inc=[];for(const f of files)inc=inc.concat(await readFile(f));
+  const base=(sample||$('#replace').checked)?{}:Object.fromEntries(rows.map(r=>[r.d,r]));
+  inc.forEach(r=>{base[r.d]=Object.assign(base[r.d]||{},r)});
+  rows=Object.values(base).sort((a,b)=>a.d<b.d?-1:1);sample=false;save();render();
+  msg(`Berhasil: ${files.length} file, ${new Set(inc.map(r=>r.d)).size} tanggal, mata uang ${CUR.filter(c=>inc.some(r=>r[c]!=null)).join(', ')}.`,true)}
+ catch(err){msg(err.message||'Gagal membaca file.',false)}
+ $('#file').value=''}
+$('#file').onchange=e=>handle(e.target.files);
+const dz=$('#drop');
+['dragover','dragenter'].forEach(t=>dz.addEventListener(t,e=>{e.preventDefault();dz.classList.add('over')}));
+['dragleave','drop'].forEach(t=>dz.addEventListener(t,e=>{e.preventDefault();dz.classList.remove('over')}));
+dz.addEventListener('drop',e=>handle(e.dataTransfer.files));
+$('#reset').onclick=()=>{try{localStorage.removeItem(LS)}catch(e){}rows=sampleData();sample=true;render();msg('Kembali ke data contoh.',true)};
+$('#range').onchange=e=>{range=+e.target.value;render()};
+document.querySelectorAll('aside a').forEach(a=>a.addEventListener('click',()=>{document.querySelectorAll('aside a').forEach(x=>x.classList.remove('on'));a.classList.add('on')}));
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',render);
+load();render();
+</script></body></html>
